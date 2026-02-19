@@ -130,39 +130,33 @@
   @media (max-width: 860px) {
     .page { grid-template-columns: 1fr; padding: 16px; }
   }
-@media (max-width: 600px) {
 
-  body {
-    font-size: 16px;
+  @media (max-width: 600px) {
+    body {
+      font-size: 16px;
+    }
+    .page {
+      padding: 10px;
+    }
+    table {
+      font-size: 13px;
+    }
+    .tire-img,
+    .tire-no-img {
+      width: 40px;
+      height: 40px;
+    }
+    td {
+      padding: 10px 8px;
+    }
+    .topbar {
+      padding: 0 12px;
+    }
+    .topbar-stats {
+      gap: 12px;
+    }
   }
 
-  .page {
-    padding: 10px;
-  }
-
-  table {
-    font-size: 13px;
-  }
-
-  .tire-img,
-  .tire-no-img {
-    width: 70px;
-    height: 70px;
-  }
-
-  td {
-    padding: 10px 8px;
-  }
-
-  .topbar {
-    padding: 0 12px;
-  }
-
-  .topbar-stats {
-    gap: 12px;
-  }
-
-}
   .card {
     background: var(--white);
     border: 1px solid var(--border);
@@ -221,7 +215,7 @@
   .upload-zone {
     border: 1.5px dashed var(--border);
     border-radius: 8px;
-    padding: 16px;
+    padding: 12px;
     text-align: center;
     cursor: pointer;
     transition: all 0.15s;
@@ -242,6 +236,33 @@
   .preview-img {
     width: 100%; height: 100px; object-fit: cover;
     border-radius: 6px; display: none; margin-bottom: 6px;
+    cursor: pointer;
+  }
+
+  .btn-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .btn-group button {
+    padding: 9px;
+    border: 1px solid var(--border);
+    background: var(--white);
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.15s;
+    color: var(--text);
+  }
+
+  .btn-group button:hover {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
   }
 
   .btn-primary {
@@ -344,6 +365,7 @@
     object-fit: cover;
     border-radius: 8px;
     border: 1px solid var(--border);
+    cursor: pointer;
   }
   
   .tire-no-img {
@@ -374,7 +396,7 @@
   .badge-ok { background: var(--green-light); color: var(--green); }
   .badge-low { background: var(--red-light); color: var(--red); }
 
-  .actions { display: flex; gap: 4px; justify-content: center; }
+  .actions { display: flex; gap: 4px; justify-content: center; flex-wrap: wrap; }
   
   .btn-icon {
     width: 30px; height: 30px;
@@ -387,10 +409,12 @@
     background: var(--white);
     color: var(--muted);
     font-weight: 700;
+    padding: 0;
   }
   
   .btn-icon:hover { border-color: transparent; color: white; transform: scale(1.05); }
   .btn-add:hover { background: var(--green); }
+  .btn-edit:hover { background: var(--accent); }
   .btn-minus:hover { background: var(--orange); }
   .btn-del:hover { background: var(--red); }
 
@@ -448,26 +472,85 @@
   tbody tr { animation: rowIn 0.2s ease; }
   
   .modal {
-  display: none;
-  position: fixed;
-  z-index: 999;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.8);
-  justify-content: center;
-  align-items: center;
-}
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    justify-content: center;
+    align-items: center;
+    overflow-y: auto;
+  }
 
-.modal-content {
-  width: 90vw;
-  max-width: 400px;        /* Giới hạn kích thước */
-  aspect-ratio: 1 / 1;     /* Luôn vuông */
-  object-fit: cover;       /* Cắt ảnh cho đầy khung */
-  border-radius: 12px;
-  background: #000;
-}
+  .modal-content {
+    background: white;
+    padding: 24px;
+    border-radius: 12px;
+    width: 90vw;
+    max-width: 400px;
+    box-shadow: var(--shadow-md);
+    animation: slideUp 0.3s ease;
+    margin: auto;
+  }
+
+  @keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  .modal-header {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: var(--text);
+    position: relative;
+  }
+
+  .modal-close {
+    position: absolute;
+    top: -30px;
+    right: 0;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: white;
+  }
+
+  .image-preview {
+    width: 100%;
+    height: 150px;
+    border-radius: 8px;
+    object-fit: cover;
+    margin-bottom: 12px;
+    display: none;
+    cursor: pointer;
+  }
+
+  .img-modal {
+    display: none;
+    position: fixed;
+    z-index: 999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.8);
+    justify-content: center;
+    align-items: center;
+  }
+
+  .img-modal-content {
+    width: 90vw;
+    max-width: 400px;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 12px;
+    background: #000;
+  }
 </style>
 </head>
 <body>
@@ -531,20 +614,17 @@
       </div>
       <div class="field">
         <label>Hình ảnh</label>
-        <div class="upload-zone">
-          <img id="preview" class="preview-img" onclick="xemAnh(this.src)">
-          <div id="uploadPlaceholder">
-            <div style="font-size:22px;margin-bottom:4px">📷</div>
-            <div class="upload-text">Nhấn để chọn ảnh</div>
-          </div>
-          <input 
-  type="file" 
-  id="anhFile" 
-  accept="image/*" 
-  capture="environment"
-  onchange="chonAnh(event)">
-          
+        <div class="btn-group">
+          <button onclick="document.getElementById('anhFile').click()">📁 Chọn file</button>
+         
         </div>
+        <img id="preview" class="preview-img" onclick="xemAnh(this.src)">
+        <div id="uploadPlaceholder">
+          <div style="font-size:22px;margin-bottom:4px">📷</div>
+          <div class="upload-text">Chọn hoặc chụp ảnh</div>
+        </div>
+        <input type="file" id="anhFile" accept="image/*" onchange="chonAnh(event)" style="display:none;">
+        <input type="file" id="anhCamera" accept="image/*" capture="environment" onchange="chonAnh(event)" style="display:none;">
       </div>
       <button class="btn-primary" onclick="them()">+ Thêm vào kho</button>
       <button class="btn-secondary" onclick="xuatDuLieu()">⬇️ Xuất dữ liệu</button>
@@ -590,6 +670,56 @@
 
 </div>
 
+<!-- Modal Xem Ảnh -->
+<div id="imgModal" class="img-modal" onclick="dongImgModal()">
+  <img id="modalImg" class="img-modal-content">
+</div>
+
+<!-- Modal Sửa Lốp -->
+<div id="editModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      Sửa thông tin lốp
+      <button class="modal-close" onclick="dongEditModal()">✕</button>
+    </div>
+    
+    <div class="field">
+      <label>Tên lốp</label>
+      <input type="text" id="editTen" placeholder="Tên lốp">
+    </div>
+    <div class="field">
+      <label>Giá nhập (₫)</label>
+      <input type="number" id="editGianhap" placeholder="0">
+    </div>
+    <div class="field">
+      <label>Giá bán (₫)</label>
+      <input type="number" id="editGiaban" placeholder="0">
+    </div>
+    <div class="field">
+      <label>Số lượng</label>
+      <input type="number" id="editTon" placeholder="0" min="0">
+    </div>
+
+    <div class="field">
+      <label>Hình ảnh</label>
+      <div class="btn-group">
+        <button onclick="document.getElementById('editImageFile').click()">📁 Chọn file</button>
+        
+      </div>
+      <img id="editImagePreview" class="image-preview" onclick="xemAnh(this.src)">
+      <div id="editUploadPlaceholder">
+        <div style="font-size:18px;margin-bottom:4px">📷</div>
+        <div class="upload-text">Chọn hoặc chụp ảnh</div>
+      </div>
+      <input type="file" id="editImageFile" accept="image/*" onchange="chonAnhSua(event)" style="display:none;">
+      <input type="file" id="editImageCamera" accept="image/*" capture="environment" onchange="chonAnhSua(event)" style="display:none;">
+    </div>
+
+    <button class="btn-primary" onclick="luuSua()">💾 Lưu sửa</button>
+    <button class="btn-secondary" onclick="dongEditModal()">Hủy</button>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
@@ -598,10 +728,11 @@
 <script>
 let data = [];
 let anhTam = "";
+let editingIndex = -1;
+let editImageTam = "";
 let db = null;
 let dbRef = null;
 
-// Firebase Config
 const firebaseConfig = {
   apiKey: "AIzaSyAXX42oWz-AE5H4jl-nV-505s406765ze4",
   authDomain: "quan-li-lop.firebaseapp.com",
@@ -610,13 +741,11 @@ const firebaseConfig = {
   appId: "1:616666519319:web:7c6f3b8d8c7c9e9f9f9f9f"
 };
 
-// Initialize Firebase
 try {
   firebase.initializeApp(firebaseConfig);
   db = firebase.database();
   dbRef = db.ref("lopData");
   
-  // Setup realtime listener
   dbRef.on("value", (snapshot) => {
     const fbData = snapshot.val();
     if (fbData) {
@@ -639,7 +768,6 @@ try {
 } catch(e) {
   console.error("Firebase init error:", e);
   updateSyncStatus(false, "Lỗi Firebase");
-  // Load from localStorage as fallback
   data = JSON.parse(localStorage.getItem("lopData")) || [];
   render();
 }
@@ -666,7 +794,6 @@ function save() {
       }
     });
   } else {
-    // Fallback to localStorage
     localStorage.setItem("lopData", JSON.stringify(data));
   }
 }
@@ -679,36 +806,30 @@ function showToast(msg) {
 }
 
 function chonAnh(e) {
-  const file = e.target.files[0];
+  let file = e.target.files[0];
   if (!file) return;
-
-  const reader = new FileReader();
-  reader.onload = function(event) {
-    const img = new Image();
-    img.onload = function() {
-
-      const canvas = document.createElement("canvas");
-      const maxWidth = 800; // giới hạn chiều rộng
-      const scale = maxWidth / img.width;
-
-      canvas.width = maxWidth;
-      canvas.height = img.height * scale;
-
-      const ctx = canvas.getContext("2d");
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-      // Nén chất lượng 0.7 (70%)
-      anhTam = canvas.toDataURL("image/jpeg", 0.7);
-
-      const p = document.getElementById("preview");
-      p.src = anhTam;
-      p.style.display = "block";
-      document.getElementById("uploadPlaceholder").style.display = "none";
-    };
-
-    img.src = event.target.result;
+  let reader = new FileReader();
+  reader.onload = x => {
+    anhTam = x.target.result;
+    const p = document.getElementById("preview");
+    p.src = anhTam;
+    p.style.display = "block";
+    document.getElementById("uploadPlaceholder").style.display = "none";
   };
+  reader.readAsDataURL(file);
+}
 
+function chonAnhSua(e) {
+  let file = e.target.files[0];
+  if (!file) return;
+  let reader = new FileReader();
+  reader.onload = x => {
+    editImageTam = x.target.result;
+    const p = document.getElementById("editImagePreview");
+    p.src = editImageTam;
+    p.style.display = "block";
+    document.getElementById("editUploadPlaceholder").style.display = "none";
+  };
   reader.readAsDataURL(file);
 }
 
@@ -731,6 +852,7 @@ function them() {
   document.getElementById("preview").style.display = "none";
   document.getElementById("uploadPlaceholder").style.display = "block";
   document.getElementById("anhFile").value = "";
+  document.getElementById("anhCamera").value = "";
   anhTam = "";
   
   showToast("✓ Đã thêm: " + ten);
@@ -756,14 +878,63 @@ function xoa(i) {
   }
 }
 
+function moEditModal(i) {
+  editingIndex = i;
+  editImageTam = "";
+  const item = data[i];
+  
+  document.getElementById("editTen").value = item.ten;
+  document.getElementById("editGianhap").value = item.gianhap;
+  document.getElementById("editGiaban").value = item.giaban;
+  document.getElementById("editTon").value = item.ton;
+  
+  const preview = document.getElementById("editImagePreview");
+  if (item.anh) {
+    preview.src = item.anh;
+    preview.style.display = "block";
+    editImageTam = item.anh;
+    document.getElementById("editUploadPlaceholder").style.display = "none";
+  } else {
+    preview.style.display = "none";
+    document.getElementById("editUploadPlaceholder").style.display = "block";
+  }
+  
+  document.getElementById("editModal").style.display = "flex";
+}
+
+function dongEditModal() {
+  document.getElementById("editModal").style.display = "none";
+}
+
+function luuSua() {
+  const ten = document.getElementById("editTen").value.trim();
+  const gianhap = Number(document.getElementById("editGianhap").value);
+  const giaban = Number(document.getElementById("editGiaban").value);
+  const ton = Number(document.getElementById("editTon").value);
+  
+  if (!ten) { showToast("⚠️ Vui lòng nhập tên lốp"); return; }
+  if (!gianhap) { showToast("⚠️ Vui lòng nhập giá nhập"); return; }
+  
+  data[editingIndex] = {
+    ten,
+    gianhap,
+    giaban,
+    ton,
+    anh: editImageTam
+  };
+  
+  save();
+  dongEditModal();
+  showToast("✓ Đã cập nhật: " + ten);
+}
+
 function fmt(n) {
   return n.toLocaleString("vi-VN") + "₫";
 }
 
 function render() {
-  let html = "", tongVon = 0, tongBan = 0, totalLoai = 0, totalQty = 0;
+  let html = "", tongVon = 0, tongBan = 0;
   
-  // Tính TOÀN BỘ kho
   let tongVonAll = 0, tongBanAll = 0;
   data.forEach(item => {
     tongVonAll += item.gianhap * item.ton;
@@ -776,12 +947,10 @@ function render() {
     if (!item.ten.toLowerCase().includes(kw)) return;
     tongVon += item.gianhap * item.ton;
     tongBan += item.giaban * item.ton;
-    totalLoai++;
-    totalQty += item.ton;
 
     const img = item.anh
-  ? `<img src="${item.anh}" class="tire-img" onclick="xemAnh('${item.anh}')">`
-  : `<div class="tire-no-img">🏎️</div>`;
+      ? `<img src="${item.anh}" class="tire-img" onclick="xemAnh('${item.anh.replace(/'/g, "\\'")}')">`
+      : `<div class="tire-no-img">🏎️</div>`;
 
     const badge = item.ton <= 2
       ? `<span class="badge badge-low">${item.ton}</span>`
@@ -795,6 +964,7 @@ function render() {
       <td>${badge}</td>
       <td><div class="actions">
         <button class="btn-icon btn-add" onclick="cong(${i})" title="Thêm">＋</button>
+        <button class="btn-icon btn-edit" onclick="moEditModal(${i})" title="Sửa">✏️</button>
         <button class="btn-icon btn-minus" onclick="tru(${i})" title="Trừ">－</button>
         <button class="btn-icon btn-del" onclick="xoa(${i})" title="Xóa">✕</button>
       </div></td>
@@ -850,22 +1020,16 @@ function nhapDuLieu(event) {
   event.target.value = "";
 }
 
-function xemAnh(src){
-  document.getElementById("modal").style.display="flex";
+function xemAnh(src) {
+  document.getElementById("imgModal").style.display = "flex";
   document.getElementById("modalImg").src = src;
 }
 
-function dongModal(){
-  document.getElementById("modal").style.display="none";
+function dongImgModal() {
+  document.getElementById("imgModal").style.display = "none";
 }
-// Initial render
+
 render();
-
-
 </script>
-<!-- Modal xem ảnh -->
-<div id="modal" class="modal" onclick="dongModal()">
-  <img id="modalImg" class="modal-content">
-</div>
 </body>
 </html>
