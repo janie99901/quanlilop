@@ -629,7 +629,8 @@
       <button class="btn-primary" onclick="them()">+ Thêm vào kho</button>
       <button class="btn-secondary" onclick="xuatDuLieu()">⬇️ Xuất dữ liệu</button>
       <button class="btn-secondary" onclick="document.getElementById('importFile').click()">⬆️ Nhập dữ liệu</button>
-      <input type="file" id="importFile" accept=".json" onchange="nhapDuLieu(event)" style="display:none;">
+      <input type="file" id="importFile" accept=".json,.csv,.xlsx" onchange="nhapDuLieu(event)" style="display:none;">
+
     </div>
   </div>
 
@@ -724,6 +725,8 @@
 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 
 <script>
 let data = [];
@@ -1002,21 +1005,77 @@ function xuatDuLieu() {
 function nhapDuLieu(event) {
   const file = event.target.files[0];
   if (!file) return;
+
   const reader = new FileReader();
-  reader.onload = (e) => {
+  const fileName = file.name.toLowerCase();
+
+  reader.onload = function(e) {
     try {
-      const importedData = JSON.parse(e.target.result);
-      if (!Array.isArray(importedData)) throw new Error("Định dạng không hợp lệ");
+      let importedData = [];
+
+      // JSON
+      if (fileName.endsWith(".json")) {
+        importedData = JSON.parse(e.target.result);
+      }
+
+      // CSV
+      else if (fileName.endsWith(".csv")) {
+        const text = e.target.result;
+        const rows = text.split("\n").slice(1); // bỏ dòng tiêu đề
+        rows.forEach(row => {
+          const cols = row.split(",");
+          if (cols.length >= 4) {
+            importedData.push({
+              ten: cols[0]?.trim(),
+              gianhap: Number(cols[1]),
+              giaban: Number(cols[2]),
+              ton: Number(cols[3]),
+              anh: ""
+            });
+          }
+        });
+      }
+
+      // Excel
+      else if (fileName.endsWith(".xlsx")) {
+        const workbook = XLSX.read(e.target.result, { type: "binary" });
+        const sheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[sheetName];
+        const jsonData = XLSX.utils.sheet_to_json(worksheet);
+
+        jsonData.forEach(row => {
+          importedData.push({
+            ten: row.ten || row.Ten || row["Tên lốp"] || "",
+            gianhap: Number(row.gianhap || row["Giá nhập"] || 0),
+            giaban: Number(row.giaban || row["Giá bán"] || 0),
+            ton: Number(row.ton || row["Số lượng"] || 0),
+            anh: ""
+          });
+        });
+      }
+
+      if (!Array.isArray(importedData) || importedData.length === 0) {
+        throw new Error("File không đúng định dạng");
+      }
+
       if (confirm("Thay thế toàn bộ dữ liệu hiện tại?")) {
         data = importedData;
         save();
+        render();
         showToast("✓ Nhập dữ liệu thành công");
       }
+
     } catch (err) {
       showToast("⚠️ Lỗi: " + err.message);
     }
   };
-  reader.readAsText(file);
+
+  if (fileName.endsWith(".xlsx")) {
+    reader.readAsBinaryString(file);
+  } else {
+    reader.readAsText(file);
+  }
+
   event.target.value = "";
 }
 
@@ -1029,7 +1088,11 @@ function dongImgModal() {
   document.getElementById("imgModal").style.display = "none";
 }
 
+ 
 render();
 </script>
 </body>
 </html>
+
+
+
